@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as iam from '@aws-cdk/aws-iam';
 import * as lambda from '@aws-cdk/aws-lambda';
+import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
 import { Secret, SecretProps } from '@aws-cdk/aws-secretsmanager';
 import * as cdk from '@aws-cdk/core';
 import { Construct } from 'constructs';
@@ -44,20 +45,9 @@ export class SmtpSecret extends Secret {
     };
     super(scope, id, props);
 
-    const generatePasswordFunction = new lambda.SingletonFunction(this, 'GenerateSmtpPasswordFunction', {
-      uuid: '26da8434-d12f-4282-8afa-078111a0b00d',
-      code: lambda.Code.fromAsset(path.resolve(__dirname, '..', 'lambda-packages', 'generate_password_handler'), {
-        bundling: {
-          image: lambda.Runtime.NODEJS_14_X.bundlingImage,
-          user: 'root',
-          command: [
-            'bash',
-            '-c',
-            'npm install -g typescript && pwd && ls -l && cp ./package.json /asset-output/package.json && npm install --prefix /asset-output /asset-output && tsc',
-          ],
-        },
-      }),
-      handler: 'index.handler',
+    const generatePasswordFunction = new NodejsFunction(this, 'GenerateSmtpPasswordFunction', {
+      entry: path.resolve(__dirname, '..', 'lambda-packages', 'generate_password_handler', 'index.ts'),
+      handler: 'handler',
       runtime: lambda.Runtime.NODEJS_14_X,
       environment: {
         SECRET_ARN: this.secretFullArn!,

@@ -9,8 +9,13 @@ const project = new AwsCdkConstructLibrary({
   cdkDependencies: [
     '@aws-cdk/core',
     '@aws-cdk/aws-iam',
-    '@aws-cdk/aws-lambda',
     '@aws-cdk/aws-secretsmanager',
+    '@aws-cdk/aws-lambda',
+    '@aws-cdk/aws-lambda-nodejs',
+  ],
+  bundledDeps: [
+    '@aws-sdk/client-secrets-manager',
+    'axios',
   ],
   gitignore: [
     'cdk.out/',
