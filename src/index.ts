@@ -53,7 +53,7 @@ export class SmtpSecret extends Secret {
           command: [
             'bash',
             '-c',
-            'npm install -g typescript && cp ./package.json /asset-output/package.json && npm install --prefix /asset-output /asset-output && tsc',
+            'npm install -g typescript && pwd && ls -l && cp ./package.json /asset-output/package.json && npm install --prefix /asset-output /asset-output && tsc',
           ],
         },
       }),

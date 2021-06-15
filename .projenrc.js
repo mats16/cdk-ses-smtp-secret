@@ -13,8 +13,8 @@ const project = new AwsCdkConstructLibrary({
     '@aws-cdk/aws-secretsmanager',
   ],
   gitignore: [
-    'cdk.out/'
-  ]
+    'cdk.out/',
+  ],
   // cdkDependencies: undefined,        /* Which AWS CDK modules (those that start with "@aws-cdk/") does this library require when consumed? */
   // cdkTestDependencies: undefined,    /* AWS CDK modules required for testing. */
   // deps: [],                          /* Runtime dependencies of this module. */
