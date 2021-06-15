@@ -18,7 +18,6 @@ const project = new AwsCdkConstructLibrary({
     'axios',
   ],
   devDeps: [
-    '@types/node',
     '@types/aws-lambda',
   ],
   gitignore: [
