@@ -1,3 +1,4 @@
+//import * as path from 'path';
 import * as iam from '@aws-cdk/aws-iam';
 import * as lambda from '@aws-cdk/aws-lambda';
 import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
@@ -44,8 +45,9 @@ export class SmtpSecret extends Secret {
     };
     super(scope, id, props);
 
-    const generatePasswordFunction = new NodejsFunction(this, 'GenerateSmtpPasswordFunction', {
-      entry: './lambda-packages/generate_password_handler/index.ts',
+    const generatePasswordHandler = new NodejsFunction(this, 'GeneratePasswordHandler', {
+      //entry: path.resolve(__dirname, '..', 'lambda-packages', 'generate_password_handler', 'index.ts'),
+      //entry: './lambda-packages/generate_password_handler/index.ts',
       handler: 'handler',
       runtime: lambda.Runtime.NODEJS_14_X,
       environment: {
@@ -63,7 +65,7 @@ export class SmtpSecret extends Secret {
     });
 
     new cdk.CustomResource(this, 'SmtpPassword', {
-      serviceToken: generatePasswordFunction.functionArn,
+      serviceToken: generatePasswordHandler.functionArn,
       properties: {
         SecretArn: this.secretFullArn!,
       },
