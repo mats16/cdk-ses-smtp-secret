@@ -2,7 +2,7 @@
   "name": "cdk-ses-smtp-secret",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mats.kazuki/cdk-ses-smtp-secret.git"
+    "url": "https://github.com/mats16/cdk-ses-smtp-secret.git"
   },
   "scripts": {
     "clobber": "npx projen clobber",
@@ -54,7 +54,17 @@
     "typescript": "^4.3.2"
   },
   "peerDependencies": {
+    "@aws-cdk/aws-iam": "^1.95.2",
+    "@aws-cdk/aws-lambda": "^1.95.2",
+    "@aws-cdk/aws-secretsmanager": "^1.95.2",
+    "@aws-cdk/core": "^1.95.2",
     "constructs": "^3.2.27"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-iam": "^1.95.2",
+    "@aws-cdk/aws-lambda": "^1.95.2",
+    "@aws-cdk/aws-secretsmanager": "^1.95.2",
+    "@aws-cdk/core": "^1.95.2"
   },
   "bundledDependencies": [],
   "keywords": [
