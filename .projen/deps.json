@@ -94,6 +94,10 @@
       "type": "bundled"
     },
     {
+      "name": "@types/aws-lambda",
+      "type": "bundled"
+    },
+    {
       "name": "axios",
       "type": "bundled"
     },

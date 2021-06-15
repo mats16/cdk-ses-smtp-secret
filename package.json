@@ -68,10 +68,12 @@
     "@aws-cdk/aws-secretsmanager": "^1.95.2",
     "@aws-cdk/core": "^1.95.2",
     "@aws-sdk/client-secrets-manager": "^3.18.0",
+    "@types/aws-lambda": "^8.10.77",
     "axios": "^0.21.1"
   },
   "bundledDependencies": [
     "@aws-sdk/client-secrets-manager",
+    "@types/aws-lambda",
     "axios"
   ],
   "keywords": [
