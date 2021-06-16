@@ -27,6 +27,11 @@
       "type": "build"
     },
     {
+      "name": "esbuild",
+      "version": "0",
+      "type": "build"
+    },
+    {
       "name": "eslint",
       "type": "build"
     },
