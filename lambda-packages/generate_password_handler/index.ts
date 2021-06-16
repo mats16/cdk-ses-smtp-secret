@@ -3,8 +3,6 @@ import { SecretsManagerClient, GetSecretValueCommand, UpdateSecretCommand } from
 import axios from "axios";
 import { createHmac } from 'crypto'
 
-const region = process.env.AWS_REGION || 'us-east-1';
-
 const dateStamp = '11111111'
 const serviceName = 'ses'
 const terminal = 'aws4_request';
@@ -44,16 +42,18 @@ const calculateKey = (secretAccessKey: string, region: string) => {
 
 export const handler: CloudFormationCustomResourceHandler = async (event, context) => {
   const secretArn: string = event.ResourceProperties.SecretArn;
+  const sesRegion: string = event.ResourceProperties.SesRegion;
 
   if (event.RequestType === 'Create' || event.RequestType === 'Update' ) {
     const secret = await getSecret(secretArn);
     const { access_key, secret_access_key } = JSON.parse(secret.SecretString || '{}');
-    const smtpPassword = calculateKey(secret_access_key, region);
+    const smtpPassword = calculateKey(secret_access_key, sesRegion);
     await updateSecret(secretArn, {
       access_key,
       secret_access_key,
       username: access_key,
-      password: smtpPassword
+      password: smtpPassword,
+      endpoint: `email-smtp.${sesRegion}.amazonaws.com`
     });
   };
 

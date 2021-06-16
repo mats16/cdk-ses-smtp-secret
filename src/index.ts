@@ -6,19 +6,49 @@ import { Secret, SecretProps } from '@aws-cdk/aws-secretsmanager';
 import * as cdk from '@aws-cdk/core';
 import { Construct } from 'constructs';
 
-class IamUser extends iam.User {
+const sesSupportedRegions = [
+  'us-east-1',
+  'us-east-2',
+  'us-west-1',
+  'us-west-2',
+  'af-south-1',
+  'ap-south-1',
+  'ap-northeast-2',
+  'ap-southeast-1',
+  'ap-southeast-2',
+  'ap-northeast-1',
+  'ca-central-1',
+  'eu-central-1',
+  'eu-west-1',
+  'eu-west-2',
+  'eu-west-3',
+  'eu-north-1',
+];
+
+export interface SmtpSecretProps extends SecretProps {
+  readonly sesRegion?: string;
+};
+
+interface SmtpUserProps extends iam.UserProps {
+  readonly sesRegion: string;
+};
+
+class SmtpUser extends iam.User {
   accessKey: string;
   secretAccessKey: string;
 
-  constructor(scope: Construct, id: string, props: iam.UserProps = {}) {
+  constructor(scope: Construct, id: string, props: SmtpUserProps) {
     super(scope, id, props);
+
+    const sesRegion = props.sesRegion;
+    const accountId = cdk.Aws.ACCOUNT_ID;
 
     this.attachInlinePolicy(new iam.Policy(this, 'AmazonSesSendingAccess', {
       policyName: 'AmazonSesSendingAccess',
       statements: [
         new iam.PolicyStatement({
           actions: ['ses:SendRawEmail'],
-          resources: ['*'],
+          resources: [`arn:aws:ses:${sesRegion}:${accountId}:*`],
         }),
       ],
     }));
@@ -31,15 +61,21 @@ class IamUser extends iam.User {
 
 export class SmtpSecret extends Secret {
 
-  constructor(scope: Construct, id: string, props: SecretProps = {}) {
-    const iamUser = new IamUser(scope, 'SmtpUser');
+  constructor(scope: Construct, id: string, props?: SmtpSecretProps) {
+
+    const sesRegion = props?.sesRegion || cdk.Aws.REGION;
+    if (!sesSupportedRegions.includes(sesRegion)) {
+      console.error(`SES is not supported in ${sesRegion}`);
+    };
+
+    const smtpUser = new SmtpUser(scope, 'SmtpUser', { sesRegion });
     props = {
       ...props,
       generateSecretString: {
         generateStringKey: 'password',
         secretStringTemplate: JSON.stringify({
-          access_key: iamUser.accessKey,
-          secret_access_key: iamUser.secretAccessKey,
+          access_key: smtpUser.accessKey,
+          secret_access_key: smtpUser.secretAccessKey,
         }),
       },
     };
@@ -67,6 +103,7 @@ export class SmtpSecret extends Secret {
       serviceToken: generatePasswordHandler.functionArn,
       properties: {
         SecretArn: this.secretFullArn!,
+        SesRegion: sesRegion,
       },
     });
   };

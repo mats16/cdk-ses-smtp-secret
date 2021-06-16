@@ -17,6 +17,7 @@ This secret has the following values. Please use `username` and `password` to se
     "access_key": "XXXXXXXXXXXXXXXXXXXXXX",
     "secret_access_key": "XXXXXXXXXXXXXXXXXXXXXX",
     "username": "XXXXXXXXXXXXXXXXXXXXXX",
-    "password": "XXXXXXXXXXXXXXXXXXXXXX"
+    "password": "XXXXXXXXXXXXXXXXXXXXXX",
+    "endpoint": "email-smtp.${region}.amazonaws.com"
 }
 ```
