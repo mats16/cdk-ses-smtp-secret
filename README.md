@@ -1,3 +1,5 @@
+## ※ This package was merged to [cdk-ses-helpers](https://www.npmjs.com/package/cdk-ses-helpers).
+
 # cdk-ses-smtp-secret
 
 CDK construct for [Amazon SES SMTP credentials](https://docs.aws.amazon.com/ses/latest/dg/smtp-credentials.html) with Amazon Secrets Manager
